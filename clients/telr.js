@@ -32,7 +32,7 @@ class Telr {
 						FullName: "",
 						Addr1: "",
 						City: "",
-						Country: "AE",
+						Country: "",
 						Email: "",
 						Phone: ""
 					},
