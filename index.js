@@ -95,14 +95,14 @@ app.post('/payment_gate', async (request, response) => {
 
     const transactionInfo = await telr.getTransacionInfo(ref);
     parseString(transactionInfo, async (err, trc) => {
-      let id = trc.transaction.id[0];
-      let srcDate = moment(trc.transaction.date[0]).utcOffset('+0400');
+      const transaction = trc.transaction;
+      let id = transaction.id[0];
+      let srcDate = moment(transaction.date[0]).utcOffset('+0400');
       let serverDate = srcDate.format('YYYY-MM-DD HH:mm:ss');
-      const status = telr.defineTransactionStatus(trc.transaction.auth[0].status[0]);
-
+      const status = telr.defineTransactionStatus(transaction.auth[0].status[0]);
       await bot.sendMessage(
         configAccess.TELEGRAM_GROUP_ID,
-        `<b>Информация по платежу:</b>\n<b>ID транзакции:</b> ${id}\n<b>Дата Дубай, ОАЭ:</b> ${serverDate}\n<b>Статус платежа:</b> ${status}`,
+        `<b>Информация по платежу:</b>\n<b>ID транзакции:</b> ${id}\n<b>Сумма платежа:</b> ${transaction.amount[0]} ${transaction.currency[0]}\n<b>Клиент:</b> ${transaction.billing[0].fullname[0] || 'Имя не указано'}\n<b>Дата Дубай, ОАЭ:</b> ${serverDate}\n<b>Статус платежа:</b> ${status}`,
         { parse_mode: 'HTML' }
       );
     });
