@@ -85,7 +85,15 @@ app.post('/', async (request, response) => {
 app.post('/payment_gate', async (request, response) => {
   if (!request.body) return response.sendStatus(200);
   try {
-    const data = request.body.split('&');
+    
+    let obj = request.body;
+    let base64regex = /^[A-Za-z0-9+/]+[=]{0,3}$/;
+    if(base64regex.test(obj)){
+      const buff = Buffer.from(obj, 'base64');
+      obj = buff.toString('utf-8');
+    }
+
+    const data = obj.split('&');
     let ref = '';
     data.forEach(el => {
       if (el.startsWith('tran_ref')) {
