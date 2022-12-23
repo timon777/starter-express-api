@@ -88,12 +88,14 @@ app.post('/payment_gate', async (request, response) => {
     
     let obj = request.body;
     let base64regex = /^[A-Za-z0-9+/]+[=]{0,3}$/;
+    console.log(obj);
     if(base64regex.test(obj)){
       const buff = Buffer.from(obj, 'base64');
       obj = buff.toString('utf-8');
     }
 
     const data = obj.split('&');
+    console.log(data);
     let ref = '';
     data.forEach(el => {
       if (el.startsWith('tran_ref')) {
